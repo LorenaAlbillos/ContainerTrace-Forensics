@@ -151,31 +151,39 @@ def evidence_viewer():
     st.markdown("---")
 
     tabs = st.tabs([
-        "Inspect",
-        "Logs",
-        "Diff",
-        "Procesos",
-        "Stats",
-        "Informe"
+    "Inspect",
+    "Logs",
+    "Diff",
+    "Procesos",
+    "Stats",
+    "Hashes",
+    "Cadena de custodia",
+    "Informe HTML"
     ])
 
     with tabs[0]:
         show_evidence_file(case_path, "inspect.json")
 
     with tabs[1]:
-        show_evidence_file(case_path, "logs.txt")
+        show_evidence_file(case_path, "logs.json")
 
     with tabs[2]:
-        show_evidence_file(case_path, "diff.txt")
+        show_evidence_file(case_path, "diff.json")
 
     with tabs[3]:
-        show_evidence_file(case_path, "top.txt")
+        show_evidence_file(case_path, "top.json")
 
     with tabs[4]:
-        show_evidence_file(case_path, "stats.txt")
+        show_evidence_file(case_path, "stats.json")
 
     with tabs[5]:
-        show_evidence_file(case_path, "report.txt")
+        show_evidence_file(case_path, "hashes.json")
+
+    with tabs[6]:
+        show_evidence_file(case_path, "chain_of_custody.json")
+
+    with tabs[7]:
+        show_evidence_file(case_path, "forensic_report.html")
 
 
 def main():
