@@ -2,16 +2,15 @@ import os
 from datetime import datetime
 
 
-def generate_html_report(evidence_dir, container_id, container_name, hashes):
+def generate_html_report(evidence_dir, container_id, container_name, files):
     report_path = os.path.join(evidence_dir, "forensic_report.html")
 
     rows = ""
 
-    for filename, data in hashes.items():
+    for filename in files:
         rows += f"""
         <tr>
             <td>{filename}</td>
-            <td>{data["sha256"]}</td>
         </tr>
         """
 
@@ -50,19 +49,11 @@ def generate_html_report(evidence_dir, container_id, container_name, hashes):
                 border: 1px solid #ccc;
                 padding: 10px;
                 text-align: left;
-                word-break: break-all;
             }}
 
             th {{
                 background-color: #0b3d91;
                 color: white;
-            }}
-
-            .note {{
-                margin-top: 20px;
-                padding: 15px;
-                background-color: #eef3ff;
-                border-left: 5px solid #0b3d91;
             }}
         </style>
     </head>
@@ -80,18 +71,14 @@ def generate_html_report(evidence_dir, container_id, container_name, hashes):
             <table>
                 <tr>
                     <th>Archivo</th>
-                    <th>SHA256</th>
                 </tr>
                 {rows}
             </table>
 
-            <div class="note">
-                <p>
-                    Las evidencias han sido exportadas en formato JSON y se ha calculado
-                    un hash SHA256 para cada archivo con el objetivo de verificar su integridad.
-                    Los archivos han sido marcados como solo lectura tras la adquisición.
-                </p>
-            </div>
+            <p>
+                Las evidencias han sido exportadas en formato JSON estructurado para facilitar
+                su análisis posterior desde la interfaz gráfica.
+            </p>
         </div>
     </body>
     </html>
