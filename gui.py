@@ -181,11 +181,11 @@ def evidence_viewer():
 def main():
     st.set_page_config(
         page_title="ContainerTrace Forensics",
-        page_icon="assets/whale_skeleton.png",
+        page_icon="assets/Logo_App.png",
         layout="wide"
     )
 
-    st.image("assets/whale_skeleton.png", width=160)
+    st.image("assets/Logo_App.png", width=160)
 
     st.title("ContainerTrace Forensics")
     st.markdown(
