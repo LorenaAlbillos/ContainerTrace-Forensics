@@ -1,42 +1,90 @@
-import subprocess
+import os
+from datetime import datetime
 
 
-def run_command(command):
+def generate_html_report(evidence_dir, container_id, container_name, files):
+    report_path = os.path.join(evidence_dir, "forensic_report.html")
+
+    rows = ""
+
+    for filename in files:
+        rows += f"""
+        <tr>
+            <td>{filename}</td>
+        </tr>
+        """
+
+    html = f"""
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>ContainerTrace Forensic Report</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                margin: 40px;
+                background-color: #f4f6f8;
+                color: #222;
+            }}
+
+            .container {{
+                background-color: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            }}
+
+            h1 {{
+                color: #0b3d91;
+            }}
+
+            table {{
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }}
+
+            th, td {{
+                border: 1px solid #ccc;
+                padding: 10px;
+                text-align: left;
+            }}
+
+            th {{
+                background-color: #0b3d91;
+                color: white;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>ContainerTrace Forensics Report</h1>
+
+            <h2>Información general</h2>
+            <p><strong>Fecha de adquisición:</strong> {datetime.now()}</p>
+            <p><strong>Nombre del contenedor:</strong> {container_name}</p>
+            <p><strong>ID del contenedor:</strong> {container_id}</p>
+            <p><strong>Herramienta:</strong> ContainerTrace Forensics</p>
+
+            <h2>Evidencias generadas</h2>
+            <table>
+                <tr>
+                    <th>Archivo</th>
+                </tr>
+                {rows}
+            </table>
+
+            <p>
+                Las evidencias han sido exportadas en formato JSON estructurado para facilitar
+                su análisis posterior desde la interfaz gráfica.
+            </p>
+        </div>
+    </body>
+    </html>
     """
-    Ejecuta un comando del sistema y devuelve su salida.
-    """
-    try:
-        result = subprocess.run(
-            command,
-            shell=True,
-            capture_output=True,
-            text=True
-        )
-        return result.stdout, result.stderr
-    except Exception as e:
-        return "", str(e)
 
+    with open(report_path, "w", encoding="utf-8") as file:
+        file.write(html)
 
-def list_containers():
-    """
-    Lista todos los contenedores Docker, estén activos o detenidos.
-    """
-    command = "docker ps -a --format '{{.ID}}|{{.Names}}|{{.Status}}'"
-    stdout, stderr = run_command(command)
-
-    containers = []
-
-    if stderr:
-        print(f"[!] Error ejecutando Docker: {stderr}")
-        return containers
-
-    for line in stdout.strip().split("\n"):
-        if line:
-            parts = line.split("|")
-            containers.append({
-                "id": parts[0],
-                "name": parts[1],
-                "status": parts[2]
-            })
-
-    return containers
+    return report_path
